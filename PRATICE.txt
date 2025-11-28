@@ -1,0 +1,42 @@
+INCLUDE Irvine32.inc
+
+.data
+string1 BYTE "ASSEMBLY",0
+target BYTE 'E'
+msg1 BYTE "Character ",0
+msg2 BYTE " occurs ",0
+msg3 BYTE "times. ",0
+
+.code
+main PROC
+
+    cld                             ; clear direction flag
+    mov edi, OFFSET string1         ; source
+    mov al , target
+    mov ecx, SIZEOF string1         ; number of bytes to copy
+    mov ebx, 0                      ;count = 0
+    CHECK:
+    lodsb 
+    cmp al,target
+    je Found
+    loop CHECK
+    jmp last
+    Found:
+    inc ebx
+    dec ecx
+    jmp CHECK
+    last:
+    mov edx, OFFSET msg1
+    call WriteString
+    mov al, target
+    call Writechar
+    mov edx, OFFSET msg2
+    call Writestring
+    mov eax, ebx
+    call writedec
+    mov edx, OFFSET msg3
+    call Writestring
+
+    exit
+main ENDP
+END main
